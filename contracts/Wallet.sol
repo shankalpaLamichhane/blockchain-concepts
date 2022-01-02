@@ -4,8 +4,6 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 contract SimpleWallet is Ownable{
 
-    event Log(string func,address sender, uint value,bytes data);
-
     mapping(address => uint) public allowance;
 
     function addAllowance(address _who, uint _amount) public onlyOwner{
@@ -15,9 +13,19 @@ contract SimpleWallet is Ownable{
 
     modifier ownerOrAllowed(uint _amount) {
         require(isOwner() || allowance[msg.sender] >= _amount, "You are not allowed");
+        _;
+    }
 
+    event Log(string func,address sender, uint value,bytes data);
+
+    function reductAllowance(address _who, uint _amount) internal {
+        allowance[_who] -= _amount;
+    }
 
     function withdrawMoney(address payable _to, uint _amount) public ownerOrAllowed(_amount) {
+        if(!isOwner()){
+            reduceAllowance(msg.sender,_amount);
+        }
         _to.transfer(_amount);
     }
 
