@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/shankalpaLamichhane/blockchain-concepts#readme",
   "dependencies": {
-    "web3": "^1.6.1"
+    "web3": "^1.6.1",
+    "web3.js-browser": "^0.2.0"
   }
 }
